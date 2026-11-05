@@ -1,4 +1,5 @@
-import { Alert, StyleSheet, View } from 'react-native';
+import { type Href, router } from 'expo-router';
+import { Alert, Pressable, StyleSheet, View } from 'react-native';
 
 import { API_ADRESI } from '@/api/istekAt';
 import { Dugme } from '@/bilesenler/Dugme';
@@ -9,10 +10,10 @@ import { useOturum } from '@/oturum/OturumContext';
 import { bosluk, kose } from '@/tema/olculer';
 import { useTema } from '@/tema/useTema';
 
-// Sonraki aşamalarda açılacak bölümler
-const bolumler = [
-  { ad: 'Pozisyonlar', aciklama: 'Açık pozisyonlar' },
-  { ad: 'Mülakatçılar', aciklama: 'İK ve teknik mülakatçılar' },
+// Adresi olan bölümler açılır; olmayanlar sonraki aşamalarda gelecek
+const bolumler: { ad: string; aciklama: string; adres?: Href }[] = [
+  { ad: 'Pozisyonlar', aciklama: 'Açık pozisyonlar', adres: '/daha-fazla/pozisyonlar' },
+  { ad: 'Mülakatçılar', aciklama: 'İK ve teknik mülakatçılar', adres: '/daha-fazla/mulakatcilar' },
   { ad: 'Soru Havuzu', aciklama: 'Teknik konular ve sorular' },
   { ad: 'İK Akışları', aciklama: 'Dallanan İK soruları' },
   { ad: 'İstatistikler', aciklama: 'Kararlar, durumlar, konular' },
@@ -62,23 +63,41 @@ export default function DahaFazla() {
       </Yazi>
 
       <Kart style={stiller.liste}>
-        {bolumler.map((bolum, sira) => (
-          <View
-            key={bolum.ad}
-            style={[stiller.satir, sira > 0 && { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: renk.kenar }]}
-          >
-            <View style={stiller.satirYazi}>
-              <Yazi tur="govdeKalin">{bolum.ad}</Yazi>
-              <Yazi tur="kucuk" renk="yaziIkincil">
-                {bolum.aciklama}
-              </Yazi>
-            </View>
+        {bolumler.map((bolum, sira) => {
+          const adres = bolum.adres;
 
-            <Yazi tur="etiket" renk="yaziSoluk">
-              Yakında
-            </Yazi>
-          </View>
-        ))}
+          return (
+            <Pressable
+              key={bolum.ad}
+              onPress={adres ? () => router.push(adres) : undefined}
+              disabled={!adres}
+              accessibilityRole={adres ? 'button' : undefined}
+              accessibilityLabel={adres ? bolum.ad : `${bolum.ad}, yakında`}
+              style={({ pressed }) => [
+                stiller.satir,
+                sira > 0 && { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: renk.kenar },
+                pressed && { backgroundColor: renk.yuzeyIkincil },
+              ]}
+            >
+              <View style={stiller.satirYazi}>
+                <Yazi tur="govdeKalin" renk={adres ? 'yazi' : 'yaziIkincil'}>
+                  {bolum.ad}
+                </Yazi>
+                <Yazi tur="kucuk" renk="yaziIkincil">
+                  {bolum.aciklama}
+                </Yazi>
+              </View>
+
+              {adres ? (
+                <Yazi renk="yaziSoluk">›</Yazi>
+              ) : (
+                <Yazi tur="etiket" renk="yaziSoluk">
+                  Yakında
+                </Yazi>
+              )}
+            </Pressable>
+          );
+        })}
       </Kart>
 
       <Yazi tur="etiket" renk="yaziIkincil" style={stiller.bolumBasligi}>

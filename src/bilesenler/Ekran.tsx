@@ -22,6 +22,8 @@ export function Ekran({ children, yenile, yenileniyor = false }: EkranProps) {
       style={{ backgroundColor: renk.zemin }}
       contentContainerStyle={stiller.icerik}
       keyboardShouldPersistTaps="handled"
+      // Klavye açılınca alttaki alanlar ve düğmeler klavyenin altında kalmasın (iOS)
+      automaticallyAdjustKeyboardInsets
       refreshControl={
         yenile ? <RefreshControl refreshing={yenileniyor} onRefresh={yenile} tintColor={renk.marka} /> : undefined
       }

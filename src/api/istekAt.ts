@@ -13,6 +13,10 @@ export const anahtariAyarla = (anahtar: string | null) => {
   oturumAnahtari = anahtar;
 };
 
+// Dosya indirme / yükleme gibi istekAt dışındaki istekler de anahtarı başlığa koyabilsin diye
+export const yetkiBasligi = (): Record<string, string> =>
+  oturumAnahtari ? { Authorization: `Bearer ${oturumAnahtari}` } : {};
+
 export const yetkisizOluncaAyarla = (fonksiyon: (() => void) | null) => {
   yetkisizOlunca = fonksiyon;
 };
