@@ -3,7 +3,7 @@ import { Stack, router } from 'expo-router';
 import { BaslikDugmesi } from '@/bilesenler/BaslikDugmesi';
 import { useTema } from '@/tema/useTema';
 
-// Adaylar sekmesinin sayfa yığını: liste -> detay; ekleme / düzenleme formu alttan açılır (modal)
+// Adaylar sekmesinin sayfa yığını: liste -> detay -> mülakatlar; ekleme / düzenleme formu alttan açılır (modal)
 export default function Duzen() {
   const { renk } = useTema();
 
@@ -26,6 +26,8 @@ export default function Duzen() {
       />
       <Stack.Screen name="[id]" options={{ title: 'Aday', headerBackTitle: 'Adaylar' }} />
       <Stack.Screen name="form" options={{ presentation: 'modal', title: 'Aday' }} />
+      <Stack.Screen name="karar" options={{ presentation: 'modal', title: 'Karar' }} />
+      <Stack.Screen name="mulakat/[adayId]" options={{ title: 'Mülakatlar', headerBackTitle: 'Aday' }} />
     </Stack>
   );
 }

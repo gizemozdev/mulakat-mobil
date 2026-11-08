@@ -145,10 +145,19 @@ export default function AdayDetayi() {
         <IletisimSatiri etiket="Telefon" deger={aday.telefon} adres={`tel:${aday.telefon.replace(/[^\d+]/g, '')}`} />
       </Kart>
 
-      <Kart>
-        <Yazi tur="etiket" renk="yaziIkincil">
-          KARAR
-        </Yazi>
+      {/* Dokununca karar formu alttan açılır; dönünce useVeri ekranı yenilediği için yeni karar görünür */}
+      <Kart
+        onPress={() => router.push({ pathname: '/adaylar/karar', params: { id: aday.id } })}
+        erisimEtiketi={`Karar: ${aday.karar}. Değiştirmek için dokun.`}
+      >
+        <View style={stiller.kararUst}>
+          <Yazi tur="etiket" renk="yaziIkincil" style={stiller.esit}>
+            KARAR
+          </Yazi>
+          <Yazi tur="kucuk" renk="marka">
+            Değiştir ›
+          </Yazi>
+        </View>
         <KararEtiketi karar={aday.karar} />
         {aday.kararNotu ? <Yazi>{aday.kararNotu}</Yazi> : null}
       </Kart>
@@ -178,6 +187,11 @@ export default function AdayDetayi() {
         )}
       </Kart>
 
+      <Dugme
+        yazi="Mülakatlar"
+        onPress={() => router.push({ pathname: '/adaylar/mulakat/[adayId]', params: { adayId: aday.id } })}
+      />
+
       <View style={stiller.ikili}>
         <Dugme
           yazi="Düzenle"
@@ -199,4 +213,5 @@ const stiller = StyleSheet.create({
   ayrac: { height: StyleSheet.hairlineWidth, marginLeft: bosluk.l },
   ikili: { flexDirection: 'row', gap: bosluk.m },
   esit: { flex: 1 },
+  kararUst: { flexDirection: 'row', alignItems: 'center' },
 });

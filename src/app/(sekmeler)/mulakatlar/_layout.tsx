@@ -9,14 +9,14 @@ export default function Duzen() {
   return (
     <Stack
       screenOptions={{
-        headerLargeTitle: true,
         headerTintColor: renk.marka,
         headerTitleStyle: { color: renk.yazi },
         headerStyle: { backgroundColor: renk.zemin },
         headerShadowVisible: false,
       }}
     >
-      <Stack.Screen name="index" options={{ title: 'Mülakatlar' }} />
+      <Stack.Screen name="index" options={{ title: 'Mülakatlar', headerLargeTitle: true }} />
+      <Stack.Screen name="[adayId]" options={{ title: 'Mülakatlar', headerBackTitle: 'Takvim' }} />
     </Stack>
   );
 }

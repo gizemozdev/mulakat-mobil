@@ -31,6 +31,7 @@ export default function KokDuzen() {
 // Not: Bu yalnızca ekranları gizler; asıl koruma sunucudadır (her API isteği anahtarı denetler).
 function Yonlendirici() {
   const { durum } = useOturum();
+  const { renk } = useTema();
 
   useEffect(() => {
     if (durum !== 'yukleniyor') {
@@ -46,6 +47,31 @@ function Yonlendirici() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Protected guard={durum === 'girisli'}>
         <Stack.Screen name="(sekmeler)" />
+        {/* Mülakat sırasında sekmeler gizlensin, mülakatçı yalnızca sorulara odaklansın: tam ekran */}
+        <Stack.Screen
+          name="teknik/[adayId]"
+          options={{
+            presentation: 'fullScreenModal',
+            headerShown: true,
+            title: 'Teknik Mülakat',
+            headerTintColor: renk.marka,
+            headerTitleStyle: { color: renk.yazi },
+            headerStyle: { backgroundColor: renk.zemin },
+            headerShadowVisible: false,
+          }}
+        />
+        <Stack.Screen
+          name="ik/[adayId]"
+          options={{
+            presentation: 'fullScreenModal',
+            headerShown: true,
+            title: 'İK Mülakatı',
+            headerTintColor: renk.marka,
+            headerTitleStyle: { color: renk.yazi },
+            headerStyle: { backgroundColor: renk.zemin },
+            headerShadowVisible: false,
+          }}
+        />
       </Stack.Protected>
 
       <Stack.Protected guard={durum === 'girissiz'}>

@@ -1,7 +1,7 @@
 import { StyleSheet, TextInput, View } from 'react-native';
 
 import { Yazi } from '@/bilesenler/Yazi';
-import type { Karar } from '@/api/tipler';
+import type { Durum, Karar } from '@/api/tipler';
 import { DOKUNMA_YUKSEKLIGI, bosluk, kose } from '@/tema/olculer';
 import type { Renkler } from '@/tema/renkler';
 import { useTema } from '@/tema/useTema';
@@ -61,6 +61,22 @@ export function KararEtiketi({ karar }: { karar: Karar }) {
   const { renk } = useTema();
 
   return <Etiket yazi={karar} {...kararRenkleri(karar, renk)} />;
+}
+
+// Mülakat durumu: sarı planlanmadı, marka rengi planlandı, yeşil tamamlandı, kırmızı iptal
+export const durumRenkleri = (durum: Durum, renk: Renkler) =>
+  ({
+    'Planlanmadı': { on: renk.uyari, zemin: renk.uyariAcik },
+    Planlandı: { on: renk.marka, zemin: renk.markaAcik },
+    Tamamlandı: { on: renk.basari, zemin: renk.basariAcik },
+    İptal: { on: renk.hata, zemin: renk.hataAcik },
+  })[durum];
+
+// "onEk" verilirse durumun önüne eklenir: "İK: Planlandı"
+export function DurumEtiketi({ durum, onEk }: { durum: Durum; onEk?: string }) {
+  const { renk } = useTema();
+
+  return <Etiket yazi={onEk ? `${onEk}: ${durum}` : durum} {...durumRenkleri(durum, renk)} />;
 }
 
 export function AramaKutusu({ deger, onDegistir, yerTutucu }: { deger: string; onDegistir: (metin: string) => void; yerTutucu: string }) {
