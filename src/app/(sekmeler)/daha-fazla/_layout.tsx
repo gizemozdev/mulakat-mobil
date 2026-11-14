@@ -40,6 +40,50 @@ export default function Duzen() {
         }}
       />
       <Stack.Screen name="mulakatci-form" options={{ presentation: 'modal', title: 'Mülakatçı' }} />
+
+      {/* Soru havuzu: konular -> konunun soruları; konu ve soru formları alttan */}
+      <Stack.Screen
+        name="soru-havuzu"
+        options={{
+          title: 'Soru Havuzu',
+          headerLargeTitle: true,
+          headerRight: () => <BaslikDugmesi yazi="Ekle" kalin onPress={() => router.push('/daha-fazla/konu-form')} />,
+        }}
+      />
+      <Stack.Screen name="konu/[id]" options={{ title: 'Konu' }} />
+      <Stack.Screen name="konu-form" options={{ presentation: 'modal', title: 'Konu' }} />
+      <Stack.Screen name="soru-form" options={{ presentation: 'modal', title: 'Soru' }} />
+
+      {/* İK akışları: liste -> akış düzenleyici; akış, soru ve seçenek formları alttan */}
+      <Stack.Screen
+        name="ik-akislari"
+        options={{
+          title: 'İK Akışları',
+          headerLargeTitle: true,
+          headerRight: () => <BaslikDugmesi yazi="Ekle" kalin onPress={() => router.push('/daha-fazla/akis-form')} />,
+        }}
+      />
+      <Stack.Screen name="ik-akis/[id]" options={{ title: 'Akış' }} />
+      <Stack.Screen name="akis-form" options={{ presentation: 'modal', title: 'Akış' }} />
+      <Stack.Screen name="ik-soru-form" options={{ presentation: 'modal', title: 'Soru' }} />
+      <Stack.Screen name="ik-secenek-form" options={{ presentation: 'modal', title: 'Seçenek' }} />
+
+      {/* İstatistikler ve aynı pozisyondaki adayların karşılaştırması */}
+      <Stack.Screen name="istatistikler" options={{ title: 'İstatistikler', headerLargeTitle: true }} />
+      <Stack.Screen name="karsilastirma" options={{ title: 'Karşılaştırma' }} />
+
+      {/* Kullanıcılar ve şifre */}
+      <Stack.Screen
+        name="kullanicilar"
+        options={{
+          title: 'Kullanıcılar',
+          headerLargeTitle: true,
+          headerRight: () => <BaslikDugmesi yazi="Ekle" kalin onPress={() => router.push('/daha-fazla/kullanici-form')} />,
+        }}
+      />
+      <Stack.Screen name="kullanici-form" options={{ presentation: 'modal', title: 'Hesap' }} />
+      <Stack.Screen name="sifre-sifirla" options={{ presentation: 'modal', title: 'Şifre' }} />
+      <Stack.Screen name="sifre-degistir" options={{ presentation: 'modal', title: 'Şifre' }} />
     </Stack>
   );
 }

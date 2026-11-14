@@ -187,10 +187,19 @@ export default function AdayDetayi() {
         )}
       </Kart>
 
-      <Dugme
-        yazi="Mülakatlar"
-        onPress={() => router.push({ pathname: '/adaylar/mulakat/[adayId]', params: { adayId: aday.id } })}
-      />
+      <View style={stiller.ikili}>
+        <Dugme
+          yazi="Mülakatlar"
+          onPress={() => router.push({ pathname: '/adaylar/mulakat/[adayId]', params: { adayId: aday.id } })}
+          style={stiller.esit}
+        />
+        <Dugme
+          yazi="Rapor"
+          tur="ikincil"
+          onPress={() => router.push({ pathname: '/rapor/[adayId]', params: { adayId: aday.id } })}
+          style={stiller.esit}
+        />
+      </View>
 
       <View style={stiller.ikili}>
         <Dugme

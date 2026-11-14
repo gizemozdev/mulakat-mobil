@@ -72,6 +72,19 @@ function Yonlendirici() {
             headerShadowVisible: false,
           }}
         />
+        {/* Rapor hem aday detayından hem karşılaştırmadan açılır; sekmelerin üstünde alttan gelen sayfa */}
+        <Stack.Screen
+          name="rapor/[adayId]"
+          options={{
+            presentation: 'modal',
+            headerShown: true,
+            title: 'Rapor',
+            headerTintColor: renk.marka,
+            headerTitleStyle: { color: renk.yazi },
+            headerStyle: { backgroundColor: renk.zemin },
+            headerShadowVisible: false,
+          }}
+        />
       </Stack.Protected>
 
       <Stack.Protected guard={durum === 'girissiz'}>

@@ -78,13 +78,18 @@ export type TeknikOturum = { durum: Durum; cevaplar: TeknikCevap[] };
 
 export type Konu = { id: number; ad: string; sorular: { id: number; metin: string }[] };
 
-// GET /api/ik-akislar (yalnızca İK mülakatında kullanılan alanlar)
+export type IkSecenek = { id: number; soruId: number; metin: string; sonrakiSoruId: number | null };
+
+export type IkSoru = { id: number; akisId: number; metin: string; secenekler: IkSecenek[] };
+
+// GET /api/ik-akislar: akışlar, soruları ve seçenekleriyle (genel akış en başta)
 export type IkAkis = {
   id: number;
   ad: string;
   genel: boolean;
+  ilkSoruId: number | null;
   pozisyonlar: { id: number; ad: string }[];
-  sorular: { id: number }[];
+  sorular: IkSoru[];
 };
 
 export type IkCevap = {
@@ -112,4 +117,22 @@ export type IkOturum = {
     genel: boolean;
     secenekler: { id: number; metin: string }[];
   } | null;
+};
+
+// GET /api/rapor/[adayId]: adayın bilgileri ve iki mülakatının bütün ayrıntıları tek seferde
+export type RaporMulakati = {
+  tarih: string;
+  saat: string;
+  durum: Durum;
+  genelNot: string;
+  mulakatci: { adSoyad: string } | null;
+  ikAkis: { ad: string } | null;
+  ikCevaplar: IkCevap[];
+  teknikCevaplar: TeknikCevap[];
+};
+
+export type Rapor = {
+  aday: Omit<Aday, 'cv'> & { pozisyon: Pozisyon };
+  ik: RaporMulakati | null;
+  teknik: RaporMulakati | null;
 };

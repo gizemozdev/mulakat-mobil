@@ -14,10 +14,10 @@ import { useTema } from '@/tema/useTema';
 const bolumler: { ad: string; aciklama: string; adres?: Href }[] = [
   { ad: 'Pozisyonlar', aciklama: 'Açık pozisyonlar', adres: '/daha-fazla/pozisyonlar' },
   { ad: 'Mülakatçılar', aciklama: 'İK ve teknik mülakatçılar', adres: '/daha-fazla/mulakatcilar' },
-  { ad: 'Soru Havuzu', aciklama: 'Teknik konular ve sorular' },
-  { ad: 'İK Akışları', aciklama: 'Dallanan İK soruları' },
-  { ad: 'İstatistikler', aciklama: 'Kararlar, durumlar, konular' },
-  { ad: 'Kullanıcılar', aciklama: 'Hesaplar ve şifre' },
+  { ad: 'Soru Havuzu', aciklama: 'Teknik konular ve sorular', adres: '/daha-fazla/soru-havuzu' },
+  { ad: 'İK Akışları', aciklama: 'Dallanan İK soruları', adres: '/daha-fazla/ik-akislari' },
+  { ad: 'İstatistikler', aciklama: 'Kararlar, durumlar, konular', adres: '/daha-fazla/istatistikler' },
+  { ad: 'Kullanıcılar', aciklama: 'Hesaplar ve şifre', adres: '/daha-fazla/kullanicilar' },
 ];
 
 // "Elif Yıldız" -> "EY"
