@@ -92,6 +92,6 @@ __tests__/                      Jest testleri (saf fonksiyonlar)
 
 ## Bilinen eksikler
 
-- **Android:** telefonun uyarı penceresi en fazla 3 düğme gösterir; Kullanıcılar'da başkasının hesabına dokununca açılan menüde 4 seçenek var. Uygulama şimdiye kadar yalnızca iPhone'da denendi.
+- **Android:** uygulama şimdiye kadar yalnızca iPhone'da denendi. Android'in uyarı penceresi en fazla 3 düğme gösterdiği için Kullanıcılar'daki 4 seçenekli menü Android'de iki pencereye bölündü; bu bölünmüş menü henüz bir Android telefonda denenmedi.
 - `npm audit`'in gösterdiği orta seviye açıklar geliştirme araçlarında (minimatch); `npm audit fix --force` Expo'yu eski bir ana sürüme düşüreceği için kullanılmamalı.
 - Uygulama yalnızca Expo Go ile çalıştırıldı; mağazaya göndermek için EAS ile derleme henüz yapılmadı.
