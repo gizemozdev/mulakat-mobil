@@ -1,56 +1,97 @@
-# Welcome to your Expo app 👋
+# Mülakat Yönetim Sistemi — Mobil
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Mülakat Yönetim Sistemi'nin iPhone / Android uygulaması. Adaylar, pozisyonlar ve mülakatçılar kaydedilir; İK ve teknik mülakatlar planlanır ve telefondan yapılır; aday kararı verilir, sonuç raporu PDF olarak paylaşılır.
 
-## Get started
+Uygulamanın kendi veritabanı yoktur: bütün veriyi web projesinin ([mulakat-yonetim-sistemi](https://github.com/gizemozdev/mulakat-yonetim-sistemi)) API'sinden alır. Bu yüzden telefonu kullanmadan önce web sunucusunun çalışıyor olması gerekir.
 
-1. Install dependencies
+## Özellikler
+
+- **Giriş:** kullanıcı adı ve şifre; oturum anahtarı telefonun şifreli deposunda (SecureStore) tutulur ve her istekte `Authorization: Bearer` başlığıyla gönderilir. Şifremi unuttum / davet kodum var: e-postaya gelen 6 haneli kodla şifre belirleme.
+- **Bugün:** giriş yapan kişiye atanmış yaklaşan mülakatlar.
+- **Adaylar:** arama ve pozisyon süzgeci, aday detayı (telefon / e-postaya dokununca arama / e-posta), CV yükleme, açma ve kaldırma, karar, sonuç raporu (PDF paylaşma).
+- **Mülakatlar:** aylık takvim, mülakatçı / tarih / saat / durum planlama, tam ekran teknik mülakat (konu seçimi, tek tek sorular, puan) ve dallanan İK mülakatı (akış seçimi, not, geri al, sonuç).
+- **Daha Fazla:** pozisyonlar, mülakatçılar, soru havuzu, İK akış düzenleyicisi (ağaç önizleme), istatistikler ve aday karşılaştırma, kullanıcılar (davet, şifre sıfırlama, e-posta).
+- Listelerde bir satıra **uzun basınca** Düzenle / Sil menüsü.
+- Açık ve koyu tema telefonun ayarına göre değişir.
+
+## Gereksinimler
+
+- Node.js ve npm
+- Telefonda **Expo Go** (App Store / Google Play)
+- Aynı ağda çalışan web sunucusu (`mulakat-yonetim-sistemi` projesinde `npm run dev`)
+
+## Kurulum
+
+1. Bağımlılıkları kurun:
 
    ```bash
    npm install
    ```
 
-2. Start the app
+2. Proje klasöründe `.env.local` dosyası oluşturup web sunucusunun **bilgisayarın ağdaki adresiyle** yazın (`localhost` olmaz: telefon için localhost telefonun kendisidir):
+
+   ```
+   EXPO_PUBLIC_API_URL=http://192.168.1.66:3000
+   ```
+
+   Bilgisayarın adresi `ipconfig` (Windows) ile görülür. Bilgisayar başka bir ağa geçerse adres değişir; o zaman bu dosyayı güncelleyip Expo'yu yeniden başlatın (`EXPO_PUBLIC_` ile başlayan değişkenler paketleme sırasında koda yazılır).
+
+3. Expo'yu başlatın ve terminaldeki QR kodu telefonun kamerasıyla okutun:
 
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+   Telefon ile bilgisayar **aynı Wi-Fi ağında** olmalıdır. Expo Go'nun "Recently opened" listesindeki eski kayıtlar eski adreslere bağlanmaya çalışır; yeni adres için QR kodu okutun.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Komutlar
 
 ```bash
-npm run reset-project
+npx expo start           # geliştirme sunucusu (Expo Go ile açılır)
+npx expo start --clear   # önbelleği temizleyerek başlatır (paket ya da .env.local değişince)
+npx expo lint            # ESLint
+npx tsc --noEmit         # tip denetimi
+npm test                 # Jest testleri (__tests__/*-test.ts)
+npm run test:izle        # testleri değişiklikleri izleyerek çalıştırır
+npx expo install <paket> # paket ekleme: Expo SDK'sıyla uyumlu sürümü seçer (npm install yerine)
+npx expo install --check # paket sürümleri SDK ile uyumlu mu
+npx expo-doctor          # proje ayarlarını ve sürümleri denetler
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+## Klasör yapısı
 
-### Other setup steps
+```
+src/
+  app/                          ekranlar (Expo Router: her dosya bir ekran, _layout.tsx gezinmeyi belirler)
+    _layout.tsx                 kök yığın: giriş / sekmeler ayrımı (Stack.Protected), tam ekran ve modal ekranlar
+    giris.tsx, sifremi-unuttum.tsx  giriş, ilk yönetici hesabı, kodla şifre belirleme
+    (sekmeler)/                 alt menü: Bugün, Adaylar, Mülakatlar, Daha Fazla (her sekmenin kendi yığını)
+    teknik/[adayId].tsx         tam ekran teknik mülakat
+    ik/[adayId].tsx             tam ekran İK mülakatı
+    rapor/[adayId].tsx          sonuç raporu ve PDF paylaşma
+  ekranlar/                     iki sekmede kullanılan ortak ekran (adayın mülakat planlaması)
+  bilesenler/                   ortak bileşenler: Yazi, Dugme, Girdi, Kart, Secim, Ekran, HataKutusu,
+                                MulakatTakvimi, TarihSaatAlani, AkisAgaci, uzunBasma (menü + onaylı silme)
+  api/                          istekAt (istek + Bearer + zaman aşımı), useVeri (ekran öne gelince veri),
+                                tipler, tarih, teknikPuan, ikAkis (uyarılar), cv, rapor (PDF)
+  oturum/OturumContext.tsx      oturum: giriş, çıkış, SecureStore
+  tema/                         renkler (açık / koyu), ölçüler, useTema
+__tests__/                      Jest testleri (saf fonksiyonlar)
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Kurallar
 
-## Learn more
+- Değişken, fonksiyon, dosya ve rota adları **Türkçe ve ASCII** (`adayKaydet`, `mulakatcilar`); ekrandaki yazılar Türkçe karakterlerle.
+- Paket eklerken her zaman `npx expo install` kullanılır. Expo Go yalnızca kendi içinde gelen yerel modüllerle çalışır; yerel kodu olan yeni bir kütüphane eklenirse geliştirme derlemesi (development build) gerekir.
+- Renkler `useTema()`'dan gelir, sabit renk yazılmaz (koyu tema). Boşluklar ve köşeler `tema/olculer.ts`'teki adlarla verilir.
+- Sunucu istekleri `istekAt` ile yapılır; liste ekranları veriyi `useVeri` ile alır (ekran her öne geldiğinde yenilenir).
+- Kurallar (benzersiz ad, silme kısıtları, döngü kontrolü vb.) sunucudadır; telefon kullanıcıya erken uyarı verir ve sunucunun mesajını gösterir.
+- Silme her zaman onay ister (`onayliSil`).
+- `src/app/` altına ekran olmayan dosya konmaz; ortak kod `src/` altındaki diğer klasörlerdedir.
+- Her işten sonra `npx expo lint`, `npx tsc --noEmit` ve `npm test` çalıştırılır.
 
-To learn more about developing your project with Expo, look at the following resources:
+## Bilinen eksikler
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- **Android:** telefonun uyarı penceresi en fazla 3 düğme gösterir; Kullanıcılar'da başkasının hesabına dokununca açılan menüde 4 seçenek var. Uygulama şimdiye kadar yalnızca iPhone'da denendi.
+- `npm audit`'in gösterdiği orta seviye açıklar geliştirme araçlarında (minimatch); `npm audit fix --force` Expo'yu eski bir ana sürüme düşüreceği için kullanılmamalı.
+- Uygulama yalnızca Expo Go ile çalıştırıldı; mağazaya göndermek için EAS ile derleme henüz yapılmadı.

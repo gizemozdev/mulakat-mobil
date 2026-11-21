@@ -8,7 +8,7 @@ import type { Rapor, RaporMulakati } from '@/api/tipler';
 
 // Rapora yazılan her metin HTML'e kaçırılır: aday adında ya da notta "<" gibi bir karakter
 // varsa sayfanın yapısını bozmasın (ya da HTML olarak çalışmasın)
-const kacir = (metin: string) =>
+export const kacir = (metin: string) =>
   metin.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 const tarihSaat = (mulakat: RaporMulakati) =>
@@ -105,7 +105,7 @@ export const raporHtml = ({ aday, ik, teknik }: Rapor) => `<!doctype html>
 
 // "Elif Yıldız" -> "Elif Yildiz - Mulakat Raporu.pdf" (paylaşılan dosyanın adı; bazı uygulamalar
 // Türkçe karakterli dosya adlarını bozabildiği için harfler sadeleştirilir)
-const dosyaAdi = (adSoyad: string) => {
+export const dosyaAdi = (adSoyad: string) => {
   const sade = adSoyad
     .replace(/ı/g, 'i').replace(/İ/g, 'I').replace(/ş/g, 's').replace(/Ş/g, 'S').replace(/ğ/g, 'g')
     .replace(/Ğ/g, 'G').replace(/ü/g, 'u').replace(/Ü/g, 'U').replace(/ö/g, 'o').replace(/Ö/g, 'O')
