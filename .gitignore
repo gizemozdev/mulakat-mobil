@@ -41,3 +41,10 @@ example
 # generated native folders
 /ios
 /android
+
+# Yapay zeka araçlarının ayar ve talimat dosyaları (web projesindeki kararla aynı: depoya girmez)
+/.claude/
+/.agents/
+/.cursor/
+/AGENTS.md
+/CLAUDE.md
