@@ -7,6 +7,7 @@ import { useVeri } from '@/api/useVeri';
 import { HataDurumu, Yukleniyor } from '@/bilesenler/Durumlar';
 import { Kart } from '@/bilesenler/Kart';
 import { Etiket } from '@/bilesenler/Kucukler';
+import { uzunBasmaMenusu } from '@/bilesenler/uzunBasma';
 import { Yazi } from '@/bilesenler/Yazi';
 import { bosluk } from '@/tema/olculer';
 import { useTema } from '@/tema/useTema';
@@ -39,6 +40,21 @@ export default function IkAkislari() {
         return (
           <Kart
             onPress={() => router.push({ pathname: '/daha-fazla/ik-akis/[id]', params: { id: akis.id } })}
+            onLongPress={() =>
+              uzunBasmaMenusu({
+                baslik: akis.ad,
+                duzenle: () => router.push({ pathname: '/daha-fazla/akis-form', params: { id: akis.id } }),
+                // Genel akış her mülakatta sorulduğu için silinemez; menüde Sil çıkmaz
+                sil: akis.genel
+                  ? undefined
+                  : {
+                      baslik: 'Akış silinsin mi?',
+                      mesaj: `"${akis.ad}" akışı, bütün soruları ve seçenekleriyle silinecek. Yapılmış mülakatların cevapları korunur.`,
+                      yol: `/api/ik-akislar/${akis.id}`,
+                      sonra: yenile,
+                    },
+              })
+            }
             erisimEtiketi={`${akis.ad}, ${akis.sorular.length} soru${uyariSayisi ? `, ${uyariSayisi} uyarı` : ''}`}
             style={stiller.satir}
           >

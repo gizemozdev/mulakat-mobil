@@ -8,6 +8,7 @@ import { Dugme } from '@/bilesenler/Dugme';
 import { BosDurum, HataDurumu, Yukleniyor } from '@/bilesenler/Durumlar';
 import { Ekran } from '@/bilesenler/Ekran';
 import { Kart } from '@/bilesenler/Kart';
+import { uzunBasmaMenusu } from '@/bilesenler/uzunBasma';
 import { Yazi } from '@/bilesenler/Yazi';
 import { bosluk } from '@/tema/olculer';
 
@@ -58,6 +59,19 @@ export default function KonuDetayi() {
             key={soru.id}
             onPress={() =>
               router.push({ pathname: '/daha-fazla/soru-form', params: { id: soru.id, konuId: konu.id } })
+            }
+            onLongPress={() =>
+              uzunBasmaMenusu({
+                baslik: `${sira + 1}. soru`,
+                duzenle: () =>
+                  router.push({ pathname: '/daha-fazla/soru-form', params: { id: soru.id, konuId: konu.id } }),
+                sil: {
+                  baslik: 'Soru silinsin mi?',
+                  mesaj: 'Soru havuzdan kaldırılır. Daha önce yapılmış mülakatların sonuçları etkilenmez.',
+                  yol: `/api/sorular/${soru.id}`,
+                  sonra: yenile,
+                },
+              })
             }
             erisimEtiketi={`${sira + 1}. soru: ${soru.metin}`}
             style={stiller.soru}

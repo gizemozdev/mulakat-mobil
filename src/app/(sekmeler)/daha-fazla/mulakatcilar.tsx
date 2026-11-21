@@ -8,6 +8,7 @@ import { BosDurum, HataDurumu, Yukleniyor } from '@/bilesenler/Durumlar';
 import { Kart } from '@/bilesenler/Kart';
 import { BasHarf, Etiket } from '@/bilesenler/Kucukler';
 import { Secim } from '@/bilesenler/Secim';
+import { uzunBasmaMenusu } from '@/bilesenler/uzunBasma';
 import { Yazi } from '@/bilesenler/Yazi';
 import { bosluk } from '@/tema/olculer';
 import { useTema } from '@/tema/useTema';
@@ -80,6 +81,18 @@ export default function Mulakatcilar() {
         return (
           <Kart
             onPress={() => router.push({ pathname: '/daha-fazla/mulakatci-form', params: { id: mulakatci.id } })}
+            onLongPress={() =>
+              uzunBasmaMenusu({
+                baslik: mulakatci.adSoyad,
+                duzenle: () => router.push({ pathname: '/daha-fazla/mulakatci-form', params: { id: mulakatci.id } }),
+                sil: {
+                  baslik: 'Mülakatçı silinsin mi?',
+                  mesaj: `${mulakatci.adSoyad} silinecek. Atandığı mülakatlar silinmez, yalnızca mülakatçı alanı boş kalır.`,
+                  yol: `/api/mulakatcilar/${mulakatci.id}`,
+                  sonra: yenile,
+                },
+              })
+            }
             erisimEtiketi={`${mulakatci.adSoyad}, ${alanAdi[mulakatci.alan]}`}
             style={stiller.satir}
           >

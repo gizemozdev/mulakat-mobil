@@ -5,6 +5,7 @@ import type { Aday, Pozisyon } from '@/api/tipler';
 import { useVeri } from '@/api/useVeri';
 import { BosDurum, HataDurumu, Yukleniyor } from '@/bilesenler/Durumlar';
 import { Kart } from '@/bilesenler/Kart';
+import { uzunBasmaMenusu } from '@/bilesenler/uzunBasma';
 import { Yazi } from '@/bilesenler/Yazi';
 import { bosluk } from '@/tema/olculer';
 import { useTema } from '@/tema/useTema';
@@ -60,6 +61,18 @@ export default function Pozisyonlar() {
         return (
           <Kart
             onPress={() => router.push({ pathname: '/daha-fazla/pozisyon-form', params: { id: pozisyon.id } })}
+            onLongPress={() =>
+              uzunBasmaMenusu({
+                baslik: pozisyon.ad,
+                duzenle: () => router.push({ pathname: '/daha-fazla/pozisyon-form', params: { id: pozisyon.id } }),
+                sil: {
+                  baslik: 'Pozisyon silinsin mi?',
+                  mesaj: `"${pozisyon.ad}" pozisyonu silinecek.`,
+                  yol: `/api/pozisyonlar/${pozisyon.id}`,
+                  sonra: yenile,
+                },
+              })
+            }
             erisimEtiketi={`${pozisyon.ad}, ${sayi} aday`}
             style={stiller.satir}
           >

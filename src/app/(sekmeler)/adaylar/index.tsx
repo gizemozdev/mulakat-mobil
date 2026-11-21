@@ -8,6 +8,7 @@ import { BosDurum, HataDurumu, Yukleniyor } from '@/bilesenler/Durumlar';
 import { Kart } from '@/bilesenler/Kart';
 import { AramaKutusu, BasHarf, KararEtiketi, metinIceriyor } from '@/bilesenler/Kucukler';
 import { Secim } from '@/bilesenler/Secim';
+import { uzunBasmaMenusu } from '@/bilesenler/uzunBasma';
 import { Yazi } from '@/bilesenler/Yazi';
 import { bosluk } from '@/tema/olculer';
 import { useTema } from '@/tema/useTema';
@@ -80,6 +81,18 @@ export default function Adaylar() {
       renderItem={({ item: aday }) => (
         <Kart
           onPress={() => router.push(`/adaylar/${aday.id}`)}
+          onLongPress={() =>
+            uzunBasmaMenusu({
+              baslik: aday.adSoyad,
+              duzenle: () => router.push({ pathname: '/adaylar/form', params: { id: aday.id } }),
+              sil: {
+                baslik: 'Aday silinsin mi?',
+                mesaj: `${aday.adSoyad} ve bütün mülakat kayıtları silinecek. Bu geri alınamaz.`,
+                yol: `/api/adaylar/${aday.id}`,
+                sonra: yenile,
+              },
+            })
+          }
           erisimEtiketi={`${aday.adSoyad}, ${aday.pozisyon.ad}`}
           style={stiller.satir}
         >

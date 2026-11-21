@@ -5,6 +5,7 @@ import type { Konu } from '@/api/tipler';
 import { useVeri } from '@/api/useVeri';
 import { BosDurum, HataDurumu, Yukleniyor } from '@/bilesenler/Durumlar';
 import { Kart } from '@/bilesenler/Kart';
+import { uzunBasmaMenusu } from '@/bilesenler/uzunBasma';
 import { Yazi } from '@/bilesenler/Yazi';
 import { bosluk } from '@/tema/olculer';
 import { useTema } from '@/tema/useTema';
@@ -45,6 +46,13 @@ export default function SoruHavuzu() {
       renderItem={({ item: konu }) => (
         <Kart
           onPress={() => router.push({ pathname: '/daha-fazla/konu/[id]', params: { id: konu.id } })}
+          onLongPress={() =>
+            uzunBasmaMenusu({
+              baslik: konu.ad,
+              duzenle: () => router.push({ pathname: '/daha-fazla/konu-form', params: { id: konu.id } }),
+              sil: { baslik: 'Konu silinsin mi?', mesaj: `"${konu.ad}" konusu silinecek.`, yol: `/api/konular/${konu.id}`, sonra: yenile },
+            })
+          }
           erisimEtiketi={`${konu.ad}, ${konu.sorular.length} soru`}
           style={stiller.satir}
         >

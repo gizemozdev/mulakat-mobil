@@ -14,6 +14,7 @@ import { Ekran } from '@/bilesenler/Ekran';
 import { Kart } from '@/bilesenler/Kart';
 import { Etiket } from '@/bilesenler/Kucukler';
 import { Secim } from '@/bilesenler/Secim';
+import { uzunBasmaMenusu } from '@/bilesenler/uzunBasma';
 import { Yazi } from '@/bilesenler/Yazi';
 import { bosluk, kose } from '@/tema/olculer';
 import { useTema } from '@/tema/useTema';
@@ -120,6 +121,20 @@ export default function AkisDuzenleyici() {
                   onPress={() =>
                     router.push({ pathname: '/daha-fazla/ik-soru-form', params: { id: soru.id, akisId: akis.id } })
                   }
+                  onLongPress={() =>
+                    uzunBasmaMenusu({
+                      baslik: kisalt(soru.metin, 40),
+                      duzenle: () =>
+                        router.push({ pathname: '/daha-fazla/ik-soru-form', params: { id: soru.id, akisId: akis.id } }),
+                      sil: {
+                        baslik: 'Soru silinsin mi?',
+                        mesaj: 'Sorunun seçenekleri de silinir. Bu soruya giden seçenekler "Mülakat biter" olur; ilk soruysa akışın ilk sorusu boşalır.',
+                        yol: `/api/ik-sorular/${soru.id}`,
+                        sonra: yenile,
+                      },
+                    })
+                  }
+                  delayLongPress={400}
                   accessibilityRole="button"
                   accessibilityLabel={`Soru: ${soru.metin}. Düzenlemek için dokun.`}
                   style={({ pressed }) => [stiller.soruUst, pressed && { opacity: 0.6 }]}
@@ -145,6 +160,23 @@ export default function AkisDuzenleyici() {
                           params: { id: secenek.id, soruId: soru.id, akisId: akis.id },
                         })
                       }
+                      onLongPress={() =>
+                        uzunBasmaMenusu({
+                          baslik: secenek.metin,
+                          duzenle: () =>
+                            router.push({
+                              pathname: '/daha-fazla/ik-secenek-form',
+                              params: { id: secenek.id, soruId: soru.id, akisId: akis.id },
+                            }),
+                          sil: {
+                            baslik: 'Seçenek silinsin mi?',
+                            mesaj: `"${secenek.metin}" seçeneği silinecek.`,
+                            yol: `/api/ik-secenekler/${secenek.id}`,
+                            sonra: yenile,
+                          },
+                        })
+                      }
+                      delayLongPress={400}
                       accessibilityRole="button"
                       style={({ pressed }) => [
                         stiller.secenek,
