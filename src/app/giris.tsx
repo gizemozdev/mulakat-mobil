@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, View, type TextInputInstance } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -27,7 +28,6 @@ export default function Giris() {
   const [sifreTekrar, setSifreTekrar] = useState('');
   const [hata, setHata] = useState('');
   const [gonderiliyor, setGonderiliyor] = useState(false);
-  const [unuttumAcik, setUnuttumAcik] = useState(false);
 
   // Klavyedeki "İleri" tuşuyla sıradaki alana geçmek için
   const kullaniciAdiAlani = useRef<TextInputInstance>(null);
@@ -146,31 +146,18 @@ export default function Giris() {
                 onSubmitEditing={() => (kurulumGerekli ? sifreTekrarAlani.current?.focus() : gonder())}
               />
 
+              {/* E-postaya kod gönderilip şifre yeniden belirlenir; davet kodu olan yeni kullanıcı da buradan girer */}
               {!kurulumGerekli && (
                 <Pressable
-                  onPress={() => setUnuttumAcik(!unuttumAcik)}
+                  onPress={() => router.push('/sifremi-unuttum')}
                   accessibilityRole="button"
-                  accessibilityState={{ expanded: unuttumAcik }}
                   hitSlop={8}
                   style={stiller.unuttum}
                 >
                   <Yazi tur="etiket" renk="marka">
-                    Şifremi unuttum
+                    Şifremi unuttum / davet kodum var
                   </Yazi>
                 </Pressable>
-              )}
-
-              {/* E-posta gönderimi olmadığı için şifreyi sistemi bilen biri sıfırlar (web'deki bilgiyle aynı) */}
-              {unuttumAcik && !kurulumGerekli && (
-                <View style={[stiller.bilgi, { backgroundColor: renk.markaAcik }]}>
-                  <Yazi tur="kucuk">
-                    Hesabı olan bir yöneticiye başvurun; Kullanıcılar bölümünden size yeni geçici şifre verebilir.
-                  </Yazi>
-                  <Yazi tur="kucuk" renk="yaziIkincil">
-                    Kimse giriş yapamıyorsa, sunucunun kurulu olduğu bilgisayarda &quot;npm run sifre-sifirla&quot;
-                    komutuyla şifre sıfırlanabilir.
-                  </Yazi>
-                </View>
               )}
 
               {kurulumGerekli && (
@@ -224,5 +211,4 @@ const stiller = StyleSheet.create({
   form: { gap: bosluk.l, padding: bosluk.xl },
   hata: { borderRadius: kose.s, padding: bosluk.m },
   unuttum: { alignSelf: 'flex-end', marginTop: -bosluk.s },
-  bilgi: { borderRadius: kose.s, padding: bosluk.m, gap: bosluk.xs },
 });

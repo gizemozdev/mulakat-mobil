@@ -39,6 +39,8 @@ export type Kullanici = {
   id: number;
   kullaniciAdi: string;
   adSoyad: string;
+  // Davet ve şifre sıfırlama kodunun gittiği adres (eski hesaplarda boş olabilir)
+  eposta: string | null;
   ben: boolean;
 };
 

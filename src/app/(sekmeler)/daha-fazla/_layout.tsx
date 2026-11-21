@@ -84,6 +84,7 @@ export default function Duzen() {
       <Stack.Screen name="kullanici-form" options={{ presentation: 'modal', title: 'Hesap' }} />
       <Stack.Screen name="sifre-sifirla" options={{ presentation: 'modal', title: 'Şifre' }} />
       <Stack.Screen name="sifre-degistir" options={{ presentation: 'modal', title: 'Şifre' }} />
+      <Stack.Screen name="eposta-form" options={{ presentation: 'modal', title: 'E-posta' }} />
     </Stack>
   );
 }

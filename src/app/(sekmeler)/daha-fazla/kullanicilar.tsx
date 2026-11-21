@@ -9,6 +9,7 @@ import { Dugme } from '@/bilesenler/Dugme';
 import { HataDurumu, Yukleniyor } from '@/bilesenler/Durumlar';
 import { Kart } from '@/bilesenler/Kart';
 import { BasHarf, Etiket } from '@/bilesenler/Kucukler';
+import { titret } from '@/bilesenler/uzunBasma';
 import { Yazi } from '@/bilesenler/Yazi';
 import { bosluk } from '@/tema/olculer';
 import { useTema } from '@/tema/useTema';
@@ -49,16 +50,31 @@ export default function Kullanicilar() {
       ]
     );
 
-  // Başka bir hesaba dokununca telefonun seçenek penceresi: şifre sıfırla ya da sil
+  const epostaDegistir = (kullanici: Kullanici) =>
+    router.push({ pathname: '/daha-fazla/eposta-form', params: { id: kullanici.id } });
+
+  // Bir hesaba dokununca telefonun seçenek penceresi.
+  // Kendi hesabı: e-posta ve şifre (silinemez). Başkasının hesabı: e-posta, şifre sıfırla, sil.
   const secenekler = (kullanici: Kullanici) =>
-    Alert.alert(kullanici.adSoyad, kullanici.kullaniciAdi, [
-      {
-        text: 'Şifresini sıfırla',
-        onPress: () => router.push({ pathname: '/daha-fazla/sifre-sifirla', params: { id: kullanici.id } }),
-      },
-      { text: 'Hesabı sil', style: 'destructive', onPress: () => sil(kullanici) },
-      { text: 'Vazgeç', style: 'cancel' },
-    ]);
+    Alert.alert(
+      kullanici.adSoyad,
+      kullanici.eposta ?? 'E-posta eklenmemiş',
+      kullanici.ben
+        ? [
+            { text: 'E-postamı değiştir', onPress: () => epostaDegistir(kullanici) },
+            { text: 'Şifremi değiştir', onPress: () => router.push('/daha-fazla/sifre-degistir') },
+            { text: 'Vazgeç', style: 'cancel' },
+          ]
+        : [
+            { text: 'E-postasını değiştir', onPress: () => epostaDegistir(kullanici) },
+            {
+              text: 'Şifresini sıfırla',
+              onPress: () => router.push({ pathname: '/daha-fazla/sifre-sifirla', params: { id: kullanici.id } }),
+            },
+            { text: 'Hesabı sil', style: 'destructive', onPress: () => sil(kullanici) },
+            { text: 'Vazgeç', style: 'cancel' },
+          ]
+    );
 
   return (
     <FlatList
@@ -79,7 +95,15 @@ export default function Kullanicilar() {
       renderItem={({ item: kullanici }) => (
         <Kart
           // Kendi hesabında seçenek yok: silinemez, şifresi yukarıdaki düğmeyle değişir
-          onPress={kullanici.ben || islenen !== null ? undefined : () => secenekler(kullanici)}
+          onPress={islenen !== null ? undefined : () => secenekler(kullanici)}
+          onLongPress={
+            islenen !== null
+              ? undefined
+              : () => {
+                  titret();
+                  secenekler(kullanici);
+                }
+          }
           erisimEtiketi={`${kullanici.adSoyad}, ${kullanici.kullaniciAdi}${kullanici.ben ? ', senin hesabın' : ''}`}
           style={stiller.satir}
         >
@@ -91,6 +115,12 @@ export default function Kullanicilar() {
             <Yazi tur="kucuk" renk="yaziIkincil" numberOfLines={1}>
               {kullanici.kullaniciAdi}
             </Yazi>
+            {/* Kullanıcı adı zaten e-postaysa ikinci kez yazılmaz */}
+            {kullanici.eposta && kullanici.eposta !== kullanici.kullaniciAdi.toLowerCase() ? (
+              <Yazi tur="kucuk" renk="yaziSoluk" numberOfLines={1}>
+                {kullanici.eposta}
+              </Yazi>
+            ) : null}
           </View>
           {kullanici.ben ? (
             <Etiket yazi="Sen" on={renk.marka} zemin={renk.markaAcik} />

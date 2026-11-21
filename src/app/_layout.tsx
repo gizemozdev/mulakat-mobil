@@ -89,6 +89,19 @@ function Yonlendirici() {
 
       <Stack.Protected guard={durum === 'girissiz'}>
         <Stack.Screen name="giris" />
+        {/* Giriş yapamayan kişi için: e-postaya kod ve kodla yeni şifre (davet kodu da buradan) */}
+        <Stack.Screen
+          name="sifremi-unuttum"
+          options={{
+            presentation: 'modal',
+            headerShown: true,
+            title: 'Şifremi Unuttum',
+            headerTintColor: renk.marka,
+            headerTitleStyle: { color: renk.yazi },
+            headerStyle: { backgroundColor: renk.zemin },
+            headerShadowVisible: false,
+          }}
+        />
       </Stack.Protected>
     </Stack>
   );
